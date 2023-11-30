@@ -1,0 +1,38 @@
+output_dir: ~/scratch/protein_output
+
+dataset:
+  class: V5
+  path: ~/scratch/protein-datasets/5V
+  atom_feature: null
+  bond_feature: null
+  discrete_label: True
+  transform:
+    class: ProteinView
+    view: residue
+
+task:
+  class: PropertyPrediction
+  model:
+    class: ProteinConvolutionalNetwork
+    input_dim: 21
+    hidden_dims: [1024, 1024]
+    kernel_size: 5
+    padding: 2
+  criterion: bce
+  metric: ['acc', 'auprc', 'auroc']
+  num_mlp_layer: 2
+  num_class: 1
+
+optimizer:
+  class: Adam
+  lr: 1.0e-4
+
+engine:
+  gpus: [0]
+  batch_size: 32
+  log_interval: 1000
+
+metric: accuracy [activity]
+
+train:
+  num_epoch: 200

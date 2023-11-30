@@ -1,0 +1,36 @@
+output_dir: ~/scratch/protein_output
+
+dataset:
+  class: V5
+  path: ~/scratch/protein-datasets/5V
+  atom_feature: null
+  bond_feature: null
+  transform:
+    class: ProteinView
+    view: residue
+
+task:
+  class: PropertyPrediction
+  model:
+    class: ProteinConvolutionalNetwork
+    input_dim: 21
+    hidden_dims: [1024, 1024]
+    kernel_size: 5
+    padding: 2
+  criterion: mse
+  metric: ['mae', 'rmse', 'spearmanr', 'pearsonr']
+  num_mlp_layer: 2
+
+optimizer:
+  class: Adam
+  lr: 1.0e-4
+
+engine:
+  gpus: [0]
+  batch_size: 32
+  log_interval: 1000
+
+metric: spearmanr [activity]
+
+train:
+  num_epoch: 200
